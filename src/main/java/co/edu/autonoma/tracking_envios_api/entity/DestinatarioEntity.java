@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class DestinatarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_envio", nullable = false, unique = true)
@@ -39,11 +39,11 @@ public class DestinatarioEntity {
     public DestinatarioEntity() {
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

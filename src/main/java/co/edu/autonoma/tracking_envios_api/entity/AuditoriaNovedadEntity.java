@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class AuditoriaNovedadEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_envio", nullable = false)
@@ -27,7 +27,7 @@ public class AuditoriaNovedadEntity {
     private UsuarioEntity usuario;
 
     @Column(name = "id_novedad_eliminada", nullable = false)
-    private Long idNovedadEliminada;
+    private int idNovedadEliminada;
 
     @Column(name = "descripcion_snapshot", nullable = false, length = 255)
     private String descripcionSnapshot;
@@ -44,11 +44,11 @@ public class AuditoriaNovedadEntity {
     public AuditoriaNovedadEntity() {
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -68,11 +68,11 @@ public class AuditoriaNovedadEntity {
         this.usuario = usuario;
     }
 
-    public Long getIdNovedadEliminada() {
+    public int getIdNovedadEliminada() {
         return idNovedadEliminada;
     }
 
-    public void setIdNovedadEliminada(Long idNovedadEliminada) {
+    public void setIdNovedadEliminada(int idNovedadEliminada) {
         this.idNovedadEliminada = idNovedadEliminada;
     }
 
