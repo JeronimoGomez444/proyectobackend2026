@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class EnvioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "codigo_seguimiento", nullable = false, unique = true, length = 20)
     private String codigoSeguimiento;
@@ -56,11 +56,11 @@ public class EnvioEntity {
         }
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

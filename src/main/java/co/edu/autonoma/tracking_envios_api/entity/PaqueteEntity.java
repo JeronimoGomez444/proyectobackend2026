@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class PaqueteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_envio", nullable = false, unique = true)
@@ -46,11 +46,11 @@ public class PaqueteEntity {
     public PaqueteEntity() {
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

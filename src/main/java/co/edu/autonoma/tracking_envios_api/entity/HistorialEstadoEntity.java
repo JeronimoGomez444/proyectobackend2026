@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class HistorialEstadoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_envio", nullable = false)
@@ -46,11 +46,11 @@ public class HistorialEstadoEntity {
     public HistorialEstadoEntity() {
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
