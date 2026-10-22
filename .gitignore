@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Salida de compilación del IDE ###
+bin/
