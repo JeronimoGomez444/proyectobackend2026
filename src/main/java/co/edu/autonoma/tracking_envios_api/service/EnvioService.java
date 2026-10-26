@@ -7,12 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import co.edu.autonoma.tracking_envios_api.dto.AuditoriaNovedadResponse;
-import co.edu.autonoma.tracking_envios_api.dto.DestinatarioResponse;
 import co.edu.autonoma.tracking_envios_api.dto.EnvioResponse;
 import co.edu.autonoma.tracking_envios_api.dto.HistorialEstadoResponse;
 import co.edu.autonoma.tracking_envios_api.dto.NovedadResponse;
-import co.edu.autonoma.tracking_envios_api.dto.PaqueteResponse;
 import co.edu.autonoma.tracking_envios_api.entity.EnvioEntity;
 import co.edu.autonoma.tracking_envios_api.enums.EstadoEnvio;
 import co.edu.autonoma.tracking_envios_api.repository.AuditoriaNovedadRepository;
@@ -34,11 +31,11 @@ public class EnvioService {
     private final AuditoriaNovedadRepository auditoriaRepository;
 
     public EnvioService(EnvioRepository envioRepository,
-                        PaqueteRepository paqueteRepository,
-                        DestinatarioRepository destinatarioRepository,
-                        HistorialEstadoRepository historialRepository,
-                        NovedadRepository novedadRepository,
-                        AuditoriaNovedadRepository auditoriaRepository) {
+            PaqueteRepository paqueteRepository,
+            DestinatarioRepository destinatarioRepository,
+            HistorialEstadoRepository historialRepository,
+            NovedadRepository novedadRepository,
+            AuditoriaNovedadRepository auditoriaRepository) {
         this.envioRepository = envioRepository;
         this.paqueteRepository = paqueteRepository;
         this.destinatarioRepository = destinatarioRepository;
@@ -66,18 +63,18 @@ public class EnvioService {
                         HttpStatus.NOT_FOUND, "No existe el envío con código " + codigo));
     }
 
-    public PaqueteResponse obtenerPaquete(Integer idEnvio) {
+    public EnvioResponse.Paquete obtenerPaquete(Integer idEnvio) {
         obtener(idEnvio);
         return paqueteRepository.findByEnvioId(idEnvio)
-                .map(PaqueteResponse::desde)
+                .map(EnvioResponse.Paquete::desde)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "El envío " + idEnvio + " no tiene paquete"));
     }
 
-    public DestinatarioResponse obtenerDestinatario(Integer idEnvio) {
+    public EnvioResponse.Destinatario obtenerDestinatario(Integer idEnvio) {
         obtener(idEnvio);
         return destinatarioRepository.findByEnvioId(idEnvio)
-                .map(DestinatarioResponse::desde)
+                .map(EnvioResponse.Destinatario::desde)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "El envío " + idEnvio + " no tiene destinatario"));
     }
@@ -94,14 +91,14 @@ public class EnvioService {
                 .map(NovedadResponse::desde).toList();
     }
 
-    public List<AuditoriaNovedadResponse> auditoriaNovedades(Integer idEnvio) {
-        obtener(idEnvio);
-        return auditoriaRepository.findByEnvioId(idEnvio).stream()
-                .map(AuditoriaNovedadResponse::desde).toList();
-    }
-
     private EnvioEntity obtener(Integer id) {
         return envioRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "No existe el envío " + id));
+    }
+
+    public List<NovedadResponse.Auditoria> auditoriaNovedades(Integer idEnvio) {
+        obtener(idEnvio);
+        return auditoriaRepository.findByEnvioId(idEnvio).stream()
+                .map(NovedadResponse.Auditoria::desde).toList();
     }
 }
