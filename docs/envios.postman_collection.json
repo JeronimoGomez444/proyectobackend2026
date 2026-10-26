@@ -1,0 +1,409 @@
+{
+  "info": {
+    "_postman_id": "08b0e145-6b5d-41ff-82cd-e5793518e62d",
+    "name": "envios",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57771909",
+    "_collection_link": "https://go.postman.co/collection/57771909-08b0e145-6b5d-41ff-82cd-e5793518e62d?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "estado",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/estado",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "usuarios-rol-invalido",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/usuarios?rol=operador",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "usuarios"
+          ],
+          "query": [
+            {
+              "key": "rol",
+              "value": "operador"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "usuario",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/usuarios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "usuarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "usuarios-rol-ok",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/usuarios?rol=OPERADOR",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "usuarios"
+          ],
+          "query": [
+            {
+              "key": "rol",
+              "value": "OPERADOR"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "usuarios-id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/usuarios/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "usuarios",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "usuarios-id-404",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/usuarios/999",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "usuarios",
+            "999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-listar",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-estado",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios?estado=CREADO",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios"
+          ],
+          "query": [
+            {
+              "key": "estado",
+              "value": "CREADO"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-id-404",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios/999",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-seguimiento",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios/seguimiento/DEMO-0001",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "seguimiento",
+            "DEMO-0001"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-seguimiento-404",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios/seguimiento/XXXX",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "seguimiento",
+            "XXXX"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-paquete",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios/1/paquete",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "1",
+            "paquete"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-destinatario",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios/1/destinatario",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "1",
+            "destinatario"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-historial",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios/1/historial",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "1",
+            "historial"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-novedades",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios/1/novedades",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "1",
+            "novedades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-auditoria",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios/1/auditoria-novedades",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "1",
+            "auditoria-novedades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-historial-404",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios/999/historial",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "999",
+            "historial"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
