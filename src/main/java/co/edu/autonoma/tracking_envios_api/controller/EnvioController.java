@@ -8,12 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.edu.autonoma.tracking_envios_api.dto.AuditoriaNovedadResponse;
-import co.edu.autonoma.tracking_envios_api.dto.DestinatarioResponse;
 import co.edu.autonoma.tracking_envios_api.dto.EnvioResponse;
 import co.edu.autonoma.tracking_envios_api.dto.HistorialEstadoResponse;
 import co.edu.autonoma.tracking_envios_api.dto.NovedadResponse;
-import co.edu.autonoma.tracking_envios_api.dto.PaqueteResponse;
 import co.edu.autonoma.tracking_envios_api.enums.EstadoEnvio;
 import co.edu.autonoma.tracking_envios_api.service.EnvioService;
 
@@ -43,12 +40,12 @@ public class EnvioController {
     }
 
     @GetMapping("/{id}/paquete")
-    public PaqueteResponse paquete(@PathVariable Integer id) {
+    public EnvioResponse.Paquete paquete(@PathVariable Integer id) {
         return service.obtenerPaquete(id);
     }
 
     @GetMapping("/{id}/destinatario")
-    public DestinatarioResponse destinatario(@PathVariable Integer id) {
+    public EnvioResponse.Destinatario destinatario(@PathVariable Integer id) {
         return service.obtenerDestinatario(id);
     }
 
@@ -63,7 +60,7 @@ public class EnvioController {
     }
 
     @GetMapping("/{id}/auditoria-novedades")
-    public List<AuditoriaNovedadResponse> auditoriaNovedades(@PathVariable Integer id) {
+    public List<NovedadResponse.Auditoria> auditoriaNovedades(@PathVariable Integer id) {
         return service.auditoriaNovedades(id);
     }
 }
