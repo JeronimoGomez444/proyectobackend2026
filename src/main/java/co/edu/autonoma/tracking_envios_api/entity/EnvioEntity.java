@@ -13,13 +13,24 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "envios")
+@Data
+@NoArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class EnvioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Include
+    @EqualsAndHashCode.Include
     private int id;
 
     @Column(name = "codigo_seguimiento", nullable = false, unique = true, length = 20)
@@ -46,77 +57,10 @@ public class EnvioEntity {
     @Column(name = "fecha_entrega")
     private LocalDateTime fechaEntrega;
 
-    public EnvioEntity() {
-    }
-
     @PrePersist
     void antesDeGuardar() {
         if (fechaCreacion == null) {
             fechaCreacion = LocalDateTime.now();
         }
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCodigoSeguimiento() {
-        return codigoSeguimiento;
-    }
-
-    public void setCodigoSeguimiento(String codigoSeguimiento) {
-        this.codigoSeguimiento = codigoSeguimiento;
-    }
-
-    public EstadoEnvio getEstadoActual() {
-        return estadoActual;
-    }
-
-    public void setEstadoActual(EstadoEnvio estadoActual) {
-        this.estadoActual = estadoActual;
-    }
-
-    public UsuarioEntity getOperador() {
-        return operador;
-    }
-
-    public void setOperador(UsuarioEntity operador) {
-        this.operador = operador;
-    }
-
-    public UsuarioEntity getRepartidor() {
-        return repartidor;
-    }
-
-    public void setRepartidor(UsuarioEntity repartidor) {
-        this.repartidor = repartidor;
-    }
-
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public LocalDateTime getFechaDespacho() {
-        return fechaDespacho;
-    }
-
-    public void setFechaDespacho(LocalDateTime fechaDespacho) {
-        this.fechaDespacho = fechaDespacho;
-    }
-
-    public LocalDateTime getFechaEntrega() {
-        return fechaEntrega;
-    }
-
-    public void setFechaEntrega(LocalDateTime fechaEntrega) {
-        this.fechaEntrega = fechaEntrega;
     }
 }
