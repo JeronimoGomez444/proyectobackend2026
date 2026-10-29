@@ -162,6 +162,26 @@
       "response": []
     },
     {
+      "name": "envios-crear",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/envios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "envios-estado",
       "request": {
         "method": "GET",

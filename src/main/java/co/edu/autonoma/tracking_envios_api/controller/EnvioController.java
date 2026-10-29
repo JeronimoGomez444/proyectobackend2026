@@ -8,11 +8,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import co.edu.autonoma.tracking_envios_api.dto.EnvioRequest;
+
 import co.edu.autonoma.tracking_envios_api.dto.EnvioResponse;
 import co.edu.autonoma.tracking_envios_api.dto.HistorialEstadoResponse;
 import co.edu.autonoma.tracking_envios_api.dto.NovedadResponse;
 import co.edu.autonoma.tracking_envios_api.enums.EstadoEnvio;
 import co.edu.autonoma.tracking_envios_api.service.EnvioService;
+
+
 
 @RestController
 @RequestMapping("/api/envios")
@@ -62,5 +70,11 @@ public class EnvioController {
     @GetMapping("/{id}/auditoria-novedades")
     public List<NovedadResponse.Auditoria> auditoriaNovedades(@PathVariable Integer id) {
         return service.auditoriaNovedades(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public EnvioResponse crear(@RequestBody EnvioRequest request) {
+        return service.crear(request);
     }
 }
