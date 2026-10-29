@@ -12,14 +12,26 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "historial_estados")
+@Data
+@NoArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class HistorialEstadoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Include
+    @EqualsAndHashCode.Include
     private int id;
+
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_envio", nullable = false)
@@ -43,62 +55,5 @@ public class HistorialEstadoEntity {
     @Column(name = "observacion", length = 255)
     private String observacion;
 
-    public HistorialEstadoEntity() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public EnvioEntity getEnvio() {
-        return envio;
-    }
-
-    public void setEnvio(EnvioEntity envio) {
-        this.envio = envio;
-    }
-
-    public UsuarioEntity getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(UsuarioEntity usuario) {
-        this.usuario = usuario;
-    }
-
-    public EstadoEnvio getEstadoAnterior() {
-        return estadoAnterior;
-    }
-
-    public void setEstadoAnterior(EstadoEnvio estadoAnterior) {
-        this.estadoAnterior = estadoAnterior;
-    }
-
-    public EstadoEnvio getEstadoNuevo() {
-        return estadoNuevo;
-    }
-
-    public void setEstadoNuevo(EstadoEnvio estadoNuevo) {
-        this.estadoNuevo = estadoNuevo;
-    }
-
-    public LocalDateTime getFechaCambio() {
-        return fechaCambio;
-    }
-
-    public void setFechaCambio(LocalDateTime fechaCambio) {
-        this.fechaCambio = fechaCambio;
-    }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
+    
 }

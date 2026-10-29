@@ -9,13 +9,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "auditoria_novedades")
+@Data
+@NoArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AuditoriaNovedadEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Include
+    @EqualsAndHashCode.Include
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -41,70 +52,5 @@ public class AuditoriaNovedadEntity {
     @Column(name = "motivo", length = 255)
     private String motivo;
 
-    public AuditoriaNovedadEntity() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public EnvioEntity getEnvio() {
-        return envio;
-    }
-
-    public void setEnvio(EnvioEntity envio) {
-        this.envio = envio;
-    }
-
-    public UsuarioEntity getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(UsuarioEntity usuario) {
-        this.usuario = usuario;
-    }
-
-    public int getIdNovedadEliminada() {
-        return idNovedadEliminada;
-    }
-
-    public void setIdNovedadEliminada(int idNovedadEliminada) {
-        this.idNovedadEliminada = idNovedadEliminada;
-    }
-
-    public String getDescripcionSnapshot() {
-        return descripcionSnapshot;
-    }
-
-    public void setDescripcionSnapshot(String descripcionSnapshot) {
-        this.descripcionSnapshot = descripcionSnapshot;
-    }
-
-    public LocalDateTime getFechaNovedadSnapshot() {
-        return fechaNovedadSnapshot;
-    }
-
-    public void setFechaNovedadSnapshot(LocalDateTime fechaNovedadSnapshot) {
-        this.fechaNovedadSnapshot = fechaNovedadSnapshot;
-    }
-
-    public LocalDateTime getFechaEliminacion() {
-        return fechaEliminacion;
-    }
-
-    public void setFechaEliminacion(LocalDateTime fechaEliminacion) {
-        this.fechaEliminacion = fechaEliminacion;
-    }
-
-    public String getMotivo() {
-        return motivo;
-    }
-
-    public void setMotivo(String motivo) {
-        this.motivo = motivo;
-    }
+   
 }

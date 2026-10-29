@@ -9,14 +9,25 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "paquetes")
+@Data
+@NoArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PaqueteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @ToString.Include
+    @EqualsAndHashCode.Include
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_envio", nullable = false, unique = true)
@@ -42,79 +53,5 @@ public class PaqueteEntity {
 
     @Column(name = "fragil", nullable = false)
     private Boolean fragil;
-
-    public PaqueteEntity() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public EnvioEntity getEnvio() {
-        return envio;
-    }
-
-    public void setEnvio(EnvioEntity envio) {
-        this.envio = envio;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public BigDecimal getPesoKg() {
-        return pesoKg;
-    }
-
-    public void setPesoKg(BigDecimal pesoKg) {
-        this.pesoKg = pesoKg;
-    }
-
-    public BigDecimal getAltoCm() {
-        return altoCm;
-    }
-
-    public void setAltoCm(BigDecimal altoCm) {
-        this.altoCm = altoCm;
-    }
-
-    public BigDecimal getAnchoCm() {
-        return anchoCm;
-    }
-
-    public void setAnchoCm(BigDecimal anchoCm) {
-        this.anchoCm = anchoCm;
-    }
-
-    public BigDecimal getLargoCm() {
-        return largoCm;
-    }
-
-    public void setLargoCm(BigDecimal largoCm) {
-        this.largoCm = largoCm;
-    }
-
-    public BigDecimal getValorDeclarado() {
-        return valorDeclarado;
-    }
-
-    public void setValorDeclarado(BigDecimal valorDeclarado) {
-        this.valorDeclarado = valorDeclarado;
-    }
-
-    public Boolean getFragil() {
-        return fragil;
-    }
-
-    public void setFragil(Boolean fragil) {
-        this.fragil = fragil;
-    }
+   
 }

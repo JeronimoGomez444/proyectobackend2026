@@ -9,12 +9,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "destinatarios")
+@Data
+@NoArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class DestinatarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Include
+    @EqualsAndHashCode.Include
     private int id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
@@ -35,63 +45,4 @@ public class DestinatarioEntity {
 
     @Column(name = "ciudad", nullable = false, length = 80)
     private String ciudad;
-
-    public DestinatarioEntity() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public EnvioEntity getEnvio() {
-        return envio;
-    }
-
-    public void setEnvio(EnvioEntity envio) {
-        this.envio = envio;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getDireccionCompleta() {
-        return direccionCompleta;
-    }
-
-    public void setDireccionCompleta(String direccionCompleta) {
-        this.direccionCompleta = direccionCompleta;
-    }
-
-    public String getBarrio() {
-        return barrio;
-    }
-
-    public void setBarrio(String barrio) {
-        this.barrio = barrio;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
-    }
 }
