@@ -20,6 +20,12 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad JPA principal de los envíos registrados en el sistema.
+ *
+ * <p>Relaciona el código de seguimiento, estado, usuarios responsables y
+ * fechas importantes del ciclo de entrega.</p>
+ */
 @Entity
 @Table(name = "envios")
 @Data
@@ -57,6 +63,9 @@ public class EnvioEntity {
     @Column(name = "fecha_entrega")
     private LocalDateTime fechaEntrega;
 
+    /**
+     * Asigna la fecha de creación antes de insertar la entidad si no fue indicada.
+     */
     @PrePersist
     void antesDeGuardar() {
         if (fechaCreacion == null) {

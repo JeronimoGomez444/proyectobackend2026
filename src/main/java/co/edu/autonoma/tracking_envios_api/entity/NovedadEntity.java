@@ -17,6 +17,12 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad JPA que representa una novedad asociada a un envío.
+ *
+ * <p>La fecha de registro se establece automáticamente antes de persistir
+ * cuando no se proporciona.</p>
+ */
 @Entity
 @Table(name = "novedades")
 @Data
@@ -47,6 +53,9 @@ public class NovedadEntity {
     @Column(name = "fecha_registro", nullable = false, updatable = false)
     private LocalDateTime fechaRegistro;
 
+    /**
+     * Asigna la fecha de registro antes de insertar la entidad si no fue indicada.
+     */
     @PrePersist
     void antesDeGuardar() {
         if (fechaRegistro == null) {

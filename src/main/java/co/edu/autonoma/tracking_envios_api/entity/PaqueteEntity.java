@@ -16,6 +16,11 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 
+/**
+ * Entidad JPA que almacena las dimensiones, el peso y otros datos del paquete.
+ *
+ * <p>La relación uno a uno vincula el paquete con su envío.</p>
+ */
 @Entity
 @Table(name = "paquetes")
 @Data

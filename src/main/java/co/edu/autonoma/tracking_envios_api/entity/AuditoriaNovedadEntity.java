@@ -16,6 +16,12 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad JPA que conserva los datos de una novedad eliminada y su eliminación.
+ *
+ * <p>La información almacenada permite auditar el evento sin depender de la
+ * existencia de la novedad original.</p>
+ */
 @Entity
 @Table(name = "auditoria_novedades")
 @Data
