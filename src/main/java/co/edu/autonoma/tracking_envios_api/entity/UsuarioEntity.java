@@ -14,6 +14,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * Entidad JPA de los usuarios que participan en la operación de los envíos.
+ *
+ * <p>El rol identifica la función del usuario, y la contraseña se almacena en
+ * la columna destinada al hash.</p>
+ */
 @Entity
 @Table(name = "usuarios")
 @Data

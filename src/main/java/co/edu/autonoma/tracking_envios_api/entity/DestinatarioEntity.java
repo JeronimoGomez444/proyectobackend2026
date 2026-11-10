@@ -14,6 +14,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * Entidad JPA que representa la información de entrega de un envío.
+ *
+ * <p>Cada destinatario se relaciona con un único envío.</p>
+ */
 @Entity
 @Table(name = "destinatarios")
 @Data

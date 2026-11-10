@@ -19,6 +19,12 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad JPA que registra una transición de estado de un envío.
+ *
+ * <p>Incluye el usuario responsable, los estados anterior y nuevo, y su
+ * observación temporal.</p>
+ */
 @Entity
 @Table(name = "historial_estados")
 @Data
