@@ -51,16 +51,17 @@ public class NovedadService {
         }
         
         NovedadEntity novedad = resultado.get();
+        EstadoEnvio estadoActualEnum = novedad.getEnvio().getEstadoActual();
+        String estadoActualStr = estadoActualEnum.name(); 
         
-        String estadoActual = novedad.getEnvio().getEstadoActual().name(); 
+        validarTransicion(estadoActualStr, nuevoEstado);
         
-        validarTransicion(estadoActual, nuevoEstado);
-        
-        novedad.getEnvio().setEstadoActual(EstadoEnvio.valueOf(nuevoEstado.toUpperCase()));
+        EstadoEnvio estadoNuevoEnum = EstadoEnvio.valueOf(nuevoEstado.toUpperCase());
+        novedad.getEnvio().setEstadoActual(estadoNuevoEnum);
         
         NovedadEntity novedadGuardada = novedadRepository.save(novedad);
         
-        registrarHistorial(null, estadoActual, nuevoEstado); 
+        registrarHistorial(novedad.getEnvio(), novedad.getUsuario(), estadoActualEnum, estadoNuevoEnum);
         
         return novedadGuardada;
     }
@@ -71,6 +72,15 @@ public class NovedadService {
         }
     }
 
-    private void registrarHistorial(Object envio, String estadoAnterior, String estadoNuevo) {
+    private void registrarHistorial(EnvioEntity envio, UsuarioEntity usuario, EstadoEnvio estadoAnterior, EstadoEnvio estadoNuevo) {
+        HistorialEstadoEntity historial = new HistorialEstadoEntity();
+        historial.setEnvio(envio);
+        historial.setUsuario(usuario);
+        historial.setEstadoAnterior(estadoAnterior);
+        historial.setEstadoNuevo(estadoNuevo);
+        historial.setFechaCambio(LocalDateTime.now());
+        historial.setObservacion("Cambio de estado automático por actualización de novedad");
+        
+        historialRepository.save(historial);
     }
 }
