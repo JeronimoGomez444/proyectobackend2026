@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+
 import co.edu.autonoma.tracking_envios_api.entity.NovedadEntity;
 import co.edu.autonoma.tracking_envios_api.repository.NovedadRepository;
+import co.edu.autonoma.tracking_envios_api.exception.EstadoInvalidoException;
+
 
 @Service
 @Transactional(readOnly = true)
