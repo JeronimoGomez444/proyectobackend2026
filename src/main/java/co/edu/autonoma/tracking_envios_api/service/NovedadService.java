@@ -12,15 +12,24 @@ import co.edu.autonoma.tracking_envios_api.entity.NovedadEntity;
 import co.edu.autonoma.tracking_envios_api.repository.NovedadRepository;
 import co.edu.autonoma.tracking_envios_api.exception.EstadoInvalidoException;
 
+import co.edu.autonoma.tracking_envios_api.enums.EstadoEnvio;
+import co.edu.autonoma.tracking_envios_api.entity.HistorialEstadoEntity;
+import co.edu.autonoma.tracking_envios_api.entity.EnvioEntity;
+import co.edu.autonoma.tracking_envios_api.entity.UsuarioEntity;
+import co.edu.autonoma.tracking_envios_api.repository.HistorialEstadoRepository;
+import java.time.LocalDateTime;
+
 
 @Service
 @Transactional(readOnly = true)
 public class NovedadService {
 
     private final NovedadRepository novedadRepository;
+    private final HistorialEstadoRepository historialRepository;
 
-    public NovedadService(NovedadRepository novedadRepository) {
+    public NovedadService(NovedadRepository novedadRepository, HistorialEstadoRepository historialRepository) {
         this.novedadRepository = novedadRepository;
+        this.historialRepository = historialRepository;
     }
 
     @Transactional
