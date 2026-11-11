@@ -38,4 +38,7 @@ public class NovedadService {
             throw new EstadoInvalidoException("No se puede cambiar un envío de ENTREGADO a EN_RUTA.");
         }
     }
+
+    private void registrarHistorial(Object envio, String estadoAnterior, String estadoNuevo) {
+    }
 }
