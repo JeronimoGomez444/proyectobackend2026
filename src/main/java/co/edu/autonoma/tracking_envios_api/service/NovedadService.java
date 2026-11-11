@@ -43,6 +43,17 @@ public class NovedadService {
                     HttpStatus.NOT_FOUND, "No existe la novedad con ID " + id);
         }
         NovedadEntity novedad = resultado.get();
+        
+        AuditoriaNovedadEntity auditoria = new AuditoriaNovedadEntity();
+        auditoria.setEnvio(novedad.getEnvio());
+        auditoria.setUsuario(novedad.getUsuario());
+        auditoria.setIdNovedadEliminada(novedad.getId());
+        auditoria.setDescripcionSnapshot(novedad.getDescripcion());
+        auditoria.setFechaNovedadSnapshot(novedad.getFechaNovedad());
+        auditoria.setFechaEliminacion(LocalDateTime.now());
+        auditoria.setMotivo("Eliminación solicitada por API");
+        
+        auditoriaRepository.save(auditoria);
         novedadRepository.delete(novedad);
     }
     
