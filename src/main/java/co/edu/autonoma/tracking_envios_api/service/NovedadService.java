@@ -33,4 +33,9 @@ public class NovedadService {
         NovedadEntity novedad = resultado.get();
         novedadRepository.delete(novedad);
     }
+    private void validarTransicion(String estadoActual, String nuevoEstado) {
+        if ("ENTREGADO".equalsIgnoreCase(estadoActual) && "EN_RUTA".equalsIgnoreCase(nuevoEstado)) {
+            throw new EstadoInvalidoException("No se puede cambiar un envío de ENTREGADO a EN_RUTA.");
+        }
+    }
 }
