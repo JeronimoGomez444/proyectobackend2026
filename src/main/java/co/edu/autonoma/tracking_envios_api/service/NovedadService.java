@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-
+import co.edu.autonoma.tracking_envios_api.entity.AuditoriaNovedadEntity;
+import co.edu.autonoma.tracking_envios_api.repository.AuditoriaNovedadRepository;
 import co.edu.autonoma.tracking_envios_api.entity.NovedadEntity;
 import co.edu.autonoma.tracking_envios_api.repository.NovedadRepository;
 import co.edu.autonoma.tracking_envios_api.exception.EstadoInvalidoException;
 
-import co.edu.autonoma.tracking_envios_api.enums.EstadoEnvio;
 import co.edu.autonoma.tracking_envios_api.entity.HistorialEstadoEntity;
 import co.edu.autonoma.tracking_envios_api.entity.EnvioEntity;
 import co.edu.autonoma.tracking_envios_api.entity.UsuarioEntity;
@@ -26,10 +26,13 @@ public class NovedadService {
 
     private final NovedadRepository novedadRepository;
     private final HistorialEstadoRepository historialRepository;
+    private final AuditoriaNovedadRepository auditoriaRepository;
 
-    public NovedadService(NovedadRepository novedadRepository, HistorialEstadoRepository historialRepository) {
+
+    public NovedadService(NovedadRepository novedadRepository, HistorialEstadoRepository historialRepository, AuditoriaNovedadRepository auditoriaRepository) {
         this.novedadRepository = novedadRepository;
         this.historialRepository = historialRepository;
+        this.auditoriaRepository = auditoriaRepository;
     }
 
     @Transactional
