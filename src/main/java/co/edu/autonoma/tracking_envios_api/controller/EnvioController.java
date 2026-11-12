@@ -10,12 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import co.edu.autonoma.tracking_envios_api.dto.EnvioRequest;
 
 import co.edu.autonoma.tracking_envios_api.dto.EnvioResponse;
+import co.edu.autonoma.tracking_envios_api.dto.EnvioUpdateRequest;
 import co.edu.autonoma.tracking_envios_api.dto.HistorialEstadoResponse;
+import co.edu.autonoma.tracking_envios_api.dto.NovedadRequest;
 import co.edu.autonoma.tracking_envios_api.dto.NovedadResponse;
 import co.edu.autonoma.tracking_envios_api.enums.EstadoEnvio;
 import co.edu.autonoma.tracking_envios_api.service.EnvioService;
@@ -92,6 +96,22 @@ public class EnvioController {
     }
 
     /**
+     * Reemplaza el paquete de un envío que todavía está en estado CREADO.
+     *
+     * @param id identificador del envío
+     * @param paquete nuevos datos completos del paquete
+     * @return paquete actualizado
+     * @throws org.springframework.web.server.ResponseStatusException si el envío ya
+     *         fue despachado o la solicitud no es válida
+     */
+    @PutMapping("/{id}/paquete")
+    public EnvioResponse.Paquete actualizarPaquete(
+            @PathVariable Integer id,
+            @RequestBody EnvioRequest.Paquete paquete) {
+        return service.actualizarPaquete(id, paquete);
+    }
+
+    /**
      * Consulta el destinatario asociado a un envío.
      *
      * @param id identificador del envío
@@ -128,6 +148,23 @@ public class EnvioController {
     }
 
     /**
+     * Registra una novedad asociada al envío durante su recorrido.
+     *
+     * @param id identificador del envío
+     * @param novedad descripción, fecha y usuario repartidor que la registra
+     * @return novedad creada
+     * @throws org.springframework.web.server.ResponseStatusException si el envío no
+     *         está en ruta o la solicitud no es válida
+     */
+    @PostMapping("/{id}/novedades")
+    @ResponseStatus(HttpStatus.CREATED)
+    public NovedadResponse crearNovedad(
+            @PathVariable Integer id,
+            @RequestBody NovedadRequest novedad) {
+        return service.crearNovedad(id, novedad);
+    }
+
+    /**
      * Consulta la auditoría de novedades de un envío.
      *
      * @param id identificador del envío
@@ -150,5 +187,21 @@ public class EnvioController {
     @ResponseStatus(HttpStatus.CREATED)
     public EnvioResponse crear(@RequestBody EnvioRequest request) {
         return service.crear(request);
+    }
+
+    /**
+     * Realiza una transición de estado permitida y registra el historial.
+     *
+     * @param id identificador del envío
+     * @param request estado nuevo y usuario responsable
+     * @return envío actualizado
+     * @throws org.springframework.web.server.ResponseStatusException si la
+     *         transición o los datos no son válidos
+     */
+    @PatchMapping("/{id}/estado")
+    public EnvioResponse actualizarEstado(
+            @PathVariable Integer id,
+            @RequestBody EnvioUpdateRequest request) {
+        return service.actualizarEstado(id, request);
     }
 }
