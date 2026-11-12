@@ -1,5 +1,6 @@
 package co.edu.autonoma.tracking_envios_api.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +15,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import co.edu.autonoma.tracking_envios_api.dto.EnvioRequest;
 import co.edu.autonoma.tracking_envios_api.dto.EnvioResponse;
+import co.edu.autonoma.tracking_envios_api.dto.EnvioUpdateRequest;
 import co.edu.autonoma.tracking_envios_api.dto.HistorialEstadoResponse;
+import co.edu.autonoma.tracking_envios_api.dto.NovedadRequest;
 import co.edu.autonoma.tracking_envios_api.dto.NovedadResponse;
 import co.edu.autonoma.tracking_envios_api.entity.AuditoriaNovedadEntity;
 import co.edu.autonoma.tracking_envios_api.entity.DestinatarioEntity;
@@ -266,6 +269,170 @@ public class EnvioService {
     }
 
     /**
+     * Cambia un envío únicamente a su siguiente estado permitido y registra el historial.
+     *
+     * @param id identificador del envío
+     * @param request estado y usuario responsable del cambio
+     * @return envío actualizado
+     * @throws ResponseStatusException si el envío, usuario o repartidor no existe,
+     *         o si los datos o la transición no son válidos
+     */
+    @Transactional
+    public EnvioResponse actualizarEstado(Integer id, EnvioUpdateRequest request) {
+        if (id == null || id <= 0 || request == null
+                || request.nuevoEstado() == null || request.idUsuario() == null) {
+            throw solicitudInvalida("Se requieren un ID de envío válido, nuevoEstado e idUsuario");
+        }
+        if (request.observacion() != null && request.observacion().length() > 255) {
+            throw solicitudInvalida("La observacion no puede superar 255 caracteres");
+        }
+
+        EnvioEntity envio = obtener(id);
+        EstadoEnvio estadoAnterior = envio.getEstadoActual();
+        validarTransicion(estadoAnterior, request.nuevoEstado());
+
+        UsuarioEntity usuario = obtenerUsuarioActivo(request.idUsuario(), "usuario");
+        if (usuario.getRol() == RolUsuario.REPARTIDOR && envio.getRepartidor() != null
+                && envio.getRepartidor().getId() != usuario.getId()) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "El envío está asignado a otro repartidor");
+        }
+
+        if (request.idRepartidor() != null) {
+            UsuarioEntity repartidor = obtenerUsuarioActivo(request.idRepartidor(), "repartidor");
+            if (repartidor.getRol() != RolUsuario.REPARTIDOR) {
+                throw solicitudInvalida("El usuario asignado debe tener el rol REPARTIDOR");
+            }
+            if (envio.getRepartidor() != null
+                    && envio.getRepartidor().getId() != repartidor.getId()) {
+                throw solicitudInvalida("No se puede reasignar un envío que ya tiene repartidor");
+            }
+            if (usuario.getRol() == RolUsuario.REPARTIDOR
+                    && usuario.getId() != repartidor.getId()) {
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN, "Un repartidor no puede asignar el envío a otro usuario");
+            }
+            envio.setRepartidor(repartidor);
+        } else if (estadoAnterior == EstadoEnvio.CREADO
+                && request.nuevoEstado() == EstadoEnvio.EN_RUTA
+                && usuario.getRol() == RolUsuario.REPARTIDOR
+                && envio.getRepartidor() == null) {
+            envio.setRepartidor(usuario);
+        }
+
+        LocalDateTime fechaCambio = LocalDateTime.now();
+        envio.setEstadoActual(request.nuevoEstado());
+        if (request.nuevoEstado() == EstadoEnvio.EN_RUTA) {
+            envio.setFechaDespacho(fechaCambio);
+        } else if (request.nuevoEstado() == EstadoEnvio.ENTREGADO) {
+            envio.setFechaEntrega(fechaCambio);
+        }
+        envioRepository.save(envio);
+
+        HistorialEstadoEntity historial = new HistorialEstadoEntity();
+        historial.setEnvio(envio);
+        historial.setUsuario(usuario);
+        historial.setEstadoAnterior(estadoAnterior);
+        historial.setEstadoNuevo(request.nuevoEstado());
+        historial.setFechaCambio(fechaCambio);
+        historial.setObservacion(request.observacion() == null || request.observacion().isBlank()
+                ? "Cambio de estado realizado por API"
+                : request.observacion().trim());
+        historialRepository.save(historial);
+
+        return EnvioResponse.desde(envio);
+    }
+
+    /**
+     * Reemplaza los datos del paquete mientras el envío todavía no ha sido despachado.
+     *
+     * @param idEnvio identificador del envío
+     * @param request nuevos datos del paquete
+     * @return paquete actualizado
+     * @throws ResponseStatusException si el envío o paquete no existe, el envío ya salió
+     *         a ruta o la solicitud no es válida
+     */
+    @Transactional
+    public EnvioResponse.Paquete actualizarPaquete(Integer idEnvio, EnvioRequest.Paquete request) {
+        if (request == null || esVacio(request.descripcion()) || request.pesoKg() == null
+                || request.pesoKg().signum() <= 0) {
+            throw solicitudInvalida("El paquete requiere descripcion y pesoKg mayor que cero");
+        }
+        if (!esPositivoSiExiste(request.altoCm()) || !esPositivoSiExiste(request.anchoCm())
+                || !esPositivoSiExiste(request.largoCm())
+                || (request.valorDeclarado() != null && request.valorDeclarado().signum() < 0)) {
+            throw solicitudInvalida("Las dimensiones deben ser mayores que cero y el valor no negativo");
+        }
+        if (request.descripcion().length() > 200) {
+            throw solicitudInvalida("La descripcion no puede superar 200 caracteres");
+        }
+
+        EnvioEntity envio = obtener(idEnvio);
+        if (envio.getEstadoActual() != EstadoEnvio.CREADO) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT, "Solo se puede actualizar el paquete antes del despacho");
+        }
+
+        Optional<PaqueteEntity> resultado = paqueteRepository.findByEnvioId(idEnvio);
+        if (resultado.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El envío " + idEnvio + " no tiene paquete");
+        }
+
+        PaqueteEntity paquete = resultado.get();
+        paquete.setDescripcion(request.descripcion().trim());
+        paquete.setPesoKg(request.pesoKg());
+        paquete.setAltoCm(request.altoCm());
+        paquete.setAnchoCm(request.anchoCm());
+        paquete.setLargoCm(request.largoCm());
+        paquete.setValorDeclarado(request.valorDeclarado());
+        paquete.setFragil(Boolean.TRUE.equals(request.fragil()));
+
+        return EnvioResponse.Paquete.desde(paqueteRepository.save(paquete));
+    }
+
+    /**
+     * Registra una novedad durante el recorrido del envío.
+     *
+     * @param idEnvio identificador del envío
+     * @param request usuario, descripción y fecha de la novedad
+     * @return novedad creada
+     * @throws ResponseStatusException si el envío, usuario no existe o no se cumplen
+     *         las condiciones para registrar la novedad
+     */
+    @Transactional
+    public NovedadResponse crearNovedad(Integer idEnvio, NovedadRequest request) {
+        if (request == null || request.idUsuario() == null || esVacio(request.descripcion())
+                || request.fechaNovedad() == null) {
+            throw solicitudInvalida("Se requieren idUsuario, descripcion y fechaNovedad");
+        }
+        if (request.descripcion().length() > 255) {
+            throw solicitudInvalida("La descripcion no puede superar 255 caracteres");
+        }
+
+        EnvioEntity envio = obtener(idEnvio);
+        if (envio.getEstadoActual() != EstadoEnvio.EN_RUTA) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT, "Solo se puede registrar una novedad durante el recorrido (EN_RUTA)");
+        }
+
+        UsuarioEntity usuario = obtenerUsuarioActivo(request.idUsuario(), "usuario");
+        if (usuario.getRol() != RolUsuario.REPARTIDOR) {
+            throw solicitudInvalida("La novedad debe ser registrada por un usuario REPARTIDOR");
+        }
+        if (envio.getRepartidor() != null && envio.getRepartidor().getId() != usuario.getId()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "El envío está asignado a otro repartidor");
+        }
+
+        NovedadEntity novedad = new NovedadEntity();
+        novedad.setEnvio(envio);
+        novedad.setUsuario(usuario);
+        novedad.setDescripcion(request.descripcion().trim());
+        novedad.setFechaNovedad(request.fechaNovedad());
+        return NovedadResponse.desde(novedadRepository.save(novedad));
+    }
+
+    /**
      * Obtiene una entidad de envío a partir de su identificador.
      *
      * @param id identificador del envío
@@ -273,11 +440,42 @@ public class EnvioService {
      * @throws ResponseStatusException si no existe un envío con ese identificador
      */
     private EnvioEntity obtener(Integer id) {
+        if (id == null || id <= 0) {
+            throw solicitudInvalida("El ID del envío debe ser positivo");
+        }
         Optional<EnvioEntity> resultado = envioRepository.findById(id);
         if (resultado.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el envío " + id);
         }
         return resultado.get();
+    }
+
+    private UsuarioEntity obtenerUsuarioActivo(Integer id, String tipoUsuario) {
+        Optional<UsuarioEntity> resultado = usuarioRepository.findById(id);
+        if (resultado.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "No existe el " + tipoUsuario + " " + id);
+        }
+        UsuarioEntity usuario = resultado.get();
+        if (!Boolean.TRUE.equals(usuario.getActivo())) {
+            throw solicitudInvalida("El " + tipoUsuario + " " + id + " no está activo");
+        }
+        return usuario;
+    }
+
+    private boolean esPositivoSiExiste(BigDecimal valor) {
+        return valor == null || valor.signum() > 0;
+    }
+
+    private void validarTransicion(EstadoEnvio estadoActual, EstadoEnvio nuevoEstado) {
+        boolean transicionPermitida = estadoActual == EstadoEnvio.CREADO
+                && nuevoEstado == EstadoEnvio.EN_RUTA;
+        transicionPermitida = transicionPermitida
+                || (estadoActual == EstadoEnvio.EN_RUTA && nuevoEstado == EstadoEnvio.ENTREGADO);
+        if (!transicionPermitida) {
+            throw solicitudInvalida("Transicion no permitida: " + estadoActual + " -> " + nuevoEstado
+                    + ". Las transiciones válidas son CREADO -> EN_RUTA -> ENTREGADO.");
+        }
     }
 
     /**

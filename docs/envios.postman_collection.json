@@ -164,8 +164,23 @@
     {
       "name": "envios-crear",
       "request": {
-        "method": "GET",
-        "header": [],
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"idOperador\": 1,\r\n  \"paquete\": {\r\n    \"descripcion\": \"Paquete de prueba\",\r\n    \"pesoKg\": 2.5,\r\n    \"altoCm\": 10,\r\n    \"anchoCm\": 20,\r\n    \"largoCm\": 30,\r\n    \"valorDeclarado\": 50000,\r\n    \"fragil\": false\r\n  },\r\n  \"destinatario\": {\r\n    \"nombre\": \"Persona de prueba\",\r\n    \"telefono\": \"3001234567\",\r\n    \"direccionCompleta\": \"Calle 10 # 20-30\",\r\n    \"barrio\": \"Centro\",\r\n    \"ciudad\": \"Bogotá\"\r\n  }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
         "url": {
           "raw": "http://localhost:8080/api/envios",
           "protocol": "http",
@@ -376,6 +391,138 @@
             "envios",
             "1",
             "novedades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-actualizar-paquete",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"descripcion\": \"Paquete actualizado\",\r\n  \"pesoKg\": 3.2,\r\n  \"altoCm\": 12,\r\n  \"anchoCm\": 22,\r\n  \"largoCm\": 32,\r\n  \"valorDeclarado\": 65000,\r\n  \"fragil\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/envios/1/paquete",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "1",
+            "paquete"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-cambiar-estado",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nuevoEstado\": \"EN_RUTA\",\r\n  \"idUsuario\": 1,\r\n  \"observacion\": \"Envío despachado\",\r\n  \"idRepartidor\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/envios/1/estado",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "1",
+            "estado"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "envios-crear-novedad",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"idUsuario\": 2,\r\n  \"descripcion\": \"Demora por cierre vial\",\r\n  \"fechaNovedad\": \"2026-11-12T15:30:00\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/envios/1/novedades",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "envios",
+            "1",
+            "novedades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "novedades-eliminar",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/novedades/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "novedades",
+            "1"
           ]
         }
       },

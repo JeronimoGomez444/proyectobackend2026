@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import co.edu.autonoma.tracking_envios_api.dto.EstadoResponse;
 import co.edu.autonoma.tracking_envios_api.service.EstadoService;
 
-/**
+/*  *//**
  * Publica el endpoint de estado de disponibilidad del servicio.
  */
 @RestController

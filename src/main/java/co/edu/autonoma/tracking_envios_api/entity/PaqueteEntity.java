@@ -30,9 +30,9 @@ import java.math.BigDecimal;
 public class PaqueteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     @ToString.Include
     @EqualsAndHashCode.Include
+    private int id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_envio", nullable = false, unique = true)
